@@ -35,13 +35,13 @@
             this.label_openfilestatus = new System.Windows.Forms.Label();
             this.button_openfile = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkBox_allowsame = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox_ct = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.checkBox_ifhasans = new System.Windows.Forms.CheckBox();
             this.openFileDialog_openfile = new System.Windows.Forms.OpenFileDialog();
             this.button_copy = new System.Windows.Forms.Button();
-            this.checkBox_allowsame = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -123,6 +123,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "出题配置";
             // 
+            // checkBox_allowsame
+            // 
+            this.checkBox_allowsame.AutoSize = true;
+            this.checkBox_allowsame.Location = new System.Drawing.Point(98, 20);
+            this.checkBox_allowsame.Name = "checkBox_allowsame";
+            this.checkBox_allowsame.Size = new System.Drawing.Size(72, 16);
+            this.checkBox_allowsame.TabIndex = 4;
+            this.checkBox_allowsame.Text = "允许重复";
+            this.checkBox_allowsame.UseVisualStyleBackColor = true;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -162,7 +172,7 @@
             // 
             // openFileDialog_openfile
             // 
-            this.openFileDialog_openfile.Filter = "旧版excel文件(*.xls)|*.xls|新版excel文件(*.xlsx)|*.xlsx|所有文件(*.*)|*.*";
+            this.openFileDialog_openfile.Filter = "Excel表格文件(*.xls,*.xlsx)|*.xls;*.xlsx";
             // 
             // button_copy
             // 
@@ -173,16 +183,6 @@
             this.button_copy.Text = "复制";
             this.button_copy.UseVisualStyleBackColor = true;
             this.button_copy.Click += new System.EventHandler(this.button_copy_Click);
-            // 
-            // checkBox_allowsame
-            // 
-            this.checkBox_allowsame.AutoSize = true;
-            this.checkBox_allowsame.Location = new System.Drawing.Point(98, 20);
-            this.checkBox_allowsame.Name = "checkBox_allowsame";
-            this.checkBox_allowsame.Size = new System.Drawing.Size(72, 16);
-            this.checkBox_allowsame.TabIndex = 4;
-            this.checkBox_allowsame.Text = "允许重复";
-            this.checkBox_allowsame.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 

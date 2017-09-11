@@ -7,6 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using NPOI.SS.UserModel;
+using System.IO;
+using NPOI.HSSF.UserModel;
+using NPOI.XSSF.UserModel;
 namespace 出题程序
 {
     public partial class Form1 : Form
@@ -104,38 +108,35 @@ namespace 出题程序
         {
             if (openFileDialog_openfile.ShowDialog() == DialogResult.OK)
             {
-                //MessageBox.Show(openFileDialog_openfile.FileName);
-                string filepath = openFileDialog_openfile.FileName;
-                string filename = openFileDialog_openfile.SafeFileName;
-
-                string strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + filepath + ";Extended Properties='Excel 12.0; HDR=Yes; IMEX=1'";
-                OleDbConnection conn = new OleDbConnection(strConn);
+                IWorkbook workbook = null;  //新建IWorkbook对象  
+                string fileName = openFileDialog_openfile.FileName;
+                FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
 
                 try
                 {
-                    conn.Open();
-                    System.Data.DataTable schemaTable = conn.GetOleDbSchemaTable(System.Data.OleDb.OleDbSchemaGuid.Tables, null);
-                    string tableName = schemaTable.Rows[0][2].ToString().Trim();
-                    string strExcel = "";
-                    OleDbDataAdapter myCommand = null;
-                    DataSet ds = null;
-                    strExcel = "select * from [" + tableName + "]";
-                    myCommand = new OleDbDataAdapter(strExcel, strConn);
-                    ds = new DataSet();
-                    myCommand.Fill(ds, tableName);
-                    int iRowCount = ds.Tables[tableName].Rows.Count;
-                    arr_ans = new string[iRowCount];
-                    arr_que = new string[iRowCount];
 
-                    //MessageBox.Show(tableName);
-                    for (int i = 0; i < iRowCount; i++)
+                    if (fileName.IndexOf(".xlsx") > 0) // 2007版本  
                     {
-                        arr_que[i] = ds.Tables[tableName].Rows[i][0].ToString().Trim();
-                        arr_ans[i] = ds.Tables[tableName].Rows[i][1].ToString().Trim();
-                        //textBox_output.AppendText(arr_que[i] + "   " + arr_ans[i] + "\r\n");
+                        workbook = new XSSFWorkbook(fileStream);  //xlsx数据读入workbook  
                     }
+                    else if (fileName.IndexOf(".xls") > 0) // 2003版本  
+                    {
+                        workbook = new HSSFWorkbook(fileStream);  //xls数据读入workbook  
+                    }
+                    ISheet sheet = workbook.GetSheetAt(0);  //获取第一个工作表  
+                    //MessageBox.Show(sheet.SheetName+","+sheet.LastRowNum);
+                    int rowCount = sheet.LastRowNum;
+                    arr_ans = new string[rowCount];
+                    arr_que = new string[rowCount];
+                    IRow row;
+                    for (int i = 0; i < rowCount; i++)  //对工作表每一行  
+                    {
+                        row = sheet.GetRow(i + 1);   //row读入第i行数据  
+                        arr_que[i] = row.GetCell(0).ToString();
+                        arr_ans[i] = row.GetCell(1).ToString();
 
-                    label_openfilestatus.Text = "当前状态：已载入文件" + filename + "；载入题目" + iRowCount + "道";
+                    }
+                    label_openfilestatus.Text = "当前状态：已载入文件" + fileName + "；载入题目" + rowCount + "道";
                     ifopenfileok = true;
                 }
                 catch (Exception ex)
@@ -143,13 +144,14 @@ namespace 出题程序
                     MessageBox.Show("打开文件失败！失败信息:\n" + ex.StackTrace);
                     return;
                 }
-                finally {
-                    conn.Close();
+                finally
+                {
+                    fileStream.Close();
+                    workbook.Close();
                 }
                 
             }
-            else { 
-            }
+
         }
 
         //帮助
