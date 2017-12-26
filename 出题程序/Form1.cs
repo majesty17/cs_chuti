@@ -215,7 +215,10 @@ namespace 出题程序
                         int num = Convert.ToInt32(arr_err[j]);
                         if (num < 1 || num > arr_ans.Length)
                             throw new Exception("题号超过了题目的范围！(1~" + arr_que.Length + ")");
-                        sb.AppendLine(arr_que[num - 1] + "=" + arr_ans[num - 1]);
+                        if(checkBox_ifhasans.Checked)
+                            sb.AppendLine(arr_que[num - 1] + (textBox_split.Text.Length == 0 ? "\t" : textBox_split.Text) + arr_ans[num - 1]);
+                        else
+                            sb.AppendLine(arr_que[num - 1]);
                     }
                 }
 
